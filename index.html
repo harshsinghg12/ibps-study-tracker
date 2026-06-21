@@ -1,0 +1,295 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>IBPS Study Tracker</title>
+
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: Poppins, sans-serif;
+      }
+
+      body {
+        background: #f5f7fb;
+        padding: 30px;
+        color: #334155;
+      }
+
+      .container {
+        max-width: 1600px;
+        margin: auto;
+      }
+
+      .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 15px;
+        margin-bottom: 20px;
+      }
+
+      h1 {
+        font-size: 32px;
+      }
+
+      .stats {
+        display: flex;
+        gap: 15px;
+      }
+
+      .card {
+        background: white;
+        padding: 20px;
+        border-radius: 20px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        min-width: 140px;
+        text-align: center;
+      }
+
+      .card h2 {
+        color: #4f46e5;
+      }
+
+      .controls {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 20px;
+      }
+
+      button {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 12px;
+        cursor: pointer;
+        font-weight: 600;
+      }
+
+      .reset-btn {
+        background: #ef4444;
+        color: white;
+      }
+
+      .progress-box {
+        margin-bottom: 20px;
+      }
+
+      .progress-text {
+        margin-bottom: 8px;
+        font-weight: 600;
+      }
+
+      .progress {
+        height: 12px;
+        background: #e2e8f0;
+        border-radius: 20px;
+        overflow: hidden;
+      }
+
+      .progress-fill {
+        height: 100%;
+        width: 0%;
+        background: linear-gradient(90deg, #6366f1, #8b5cf6);
+        transition: 0.3s;
+      }
+
+      .table-container {
+        background: white;
+        padding: 20px;
+        border-radius: 25px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        overflow-x: auto;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0 10px;
+        min-width: 1200px;
+      }
+
+      th {
+        background: #eef2ff;
+        color: #4338ca;
+        padding: 15px;
+      }
+
+      td {
+        background: #f8fafc;
+        padding: 15px;
+        text-align: center;
+      }
+
+      td:first-child,
+      td:nth-child(2) {
+        text-align: left;
+        font-weight: 500;
+      }
+
+      tr td:first-child {
+        border-radius: 15px 0 0 15px;
+      }
+
+      tr td:last-child {
+        border-radius: 0 15px 15px 0;
+      }
+
+      input[type="checkbox"] {
+        width: 22px;
+        height: 22px;
+        cursor: pointer;
+        accent-color: #4f46e5;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container">
+      <div class="header">
+        <h1>📚 IBPS PO Study Tracker</h1>
+
+        <div class="stats">
+          <div class="card">
+            <h2 id="completed">0</h2>
+            <p>Completed</p>
+          </div>
+
+          <div class="card">
+            <h2 id="remaining">0</h2>
+            <p>Remaining</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="controls">
+        <button class="reset-btn" onclick="resetTracker()">
+          Reset Tracker
+        </button>
+      </div>
+
+      <div class="progress-box">
+        <div class="progress-text" id="progressText">Overall Progress: 0%</div>
+
+        <div class="progress">
+          <div class="progress-fill" id="progressFill"></div>
+        </div>
+      </div>
+
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr id="dateHeader">
+              <th>⏰ Time Slot</th>
+              <th>📖 Task</th>
+            </tr>
+          </thead>
+
+          <tbody id="tableBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <script>
+      const dates = [
+        "21 Jun",
+        "22 Jun",
+        "23 Jun",
+        "24 Jun",
+        "25 Jun",
+        "26 Jun",
+        "27 Jun",
+        "28 Jun",
+        "29 Jun",
+        "30 Jun",
+      ];
+
+      const tasks = [
+        ["5:30 AM - 7:00 AM", "🏃 Running"],
+        ["8:30 AM - 11:00 AM", "🧠 Reasoning + Revision"],
+        ["11:00 AM - 1:30 PM", "📖 Editorial + English"],
+        ["2:00 PM - 5:00 PM", "📊 Quant Checklist + DI"],
+        ["5:00 PM - 8:00 PM", "🔁 Quant Revision"],
+        ["9:00 PM - 11:00 PM", "🎯 Mock IBPS PO"],
+        ["11:00 PM - 12:00 AM", "📚 English Revision"],
+      ];
+
+      const header = document.getElementById("dateHeader");
+
+      dates.forEach((date) => {
+        const th = document.createElement("th");
+        th.textContent = date;
+        header.appendChild(th);
+      });
+
+      const body = document.getElementById("tableBody");
+
+      tasks.forEach((task, row) => {
+        const tr = document.createElement("tr");
+
+        tr.innerHTML = `
+<td>${task[0]}</td>
+<td>${task[1]}</td>
+`;
+
+        dates.forEach((date, col) => {
+          const td = document.createElement("td");
+
+          const checkbox = document.createElement("input");
+          checkbox.type = "checkbox";
+
+          const key = `ibps-tracker-june-${row}-${col}`;
+
+          checkbox.checked = localStorage.getItem(key) === "true";
+
+          checkbox.addEventListener("change", () => {
+            localStorage.setItem(key, checkbox.checked);
+            updateProgress();
+          });
+
+          td.appendChild(checkbox);
+          tr.appendChild(td);
+        });
+
+        body.appendChild(tr);
+      });
+
+      function updateProgress() {
+        const all = document.querySelectorAll('input[type="checkbox"]');
+        const checked = document.querySelectorAll(
+          'input[type="checkbox"]:checked',
+        );
+
+        const completed = checked.length;
+        const total = all.length;
+
+        document.getElementById("completed").innerText = completed;
+        document.getElementById("remaining").innerText = total - completed;
+
+        const percentage = Math.round((completed / total) * 100);
+
+        document.getElementById("progressFill").style.width = percentage + "%";
+
+        document.getElementById("progressText").innerText =
+          `Overall Progress: ${percentage}%`;
+      }
+
+      function resetTracker() {
+        if (confirm("Reset all progress?")) {
+          Object.keys(localStorage).forEach((key) => {
+            if (key.startsWith("ibps-tracker-june")) {
+              localStorage.removeItem(key);
+            }
+          });
+
+          location.reload();
+        }
+      }
+
+      updateProgress();
+    </script>
+  </body>
+</html>
