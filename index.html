@@ -1,295 +1,349 @@
-<!doctype html>
+
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>IBPS Study Tracker</title>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IBPS PO Tracker V2</title>
 
-    <style>
-      * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-        font-family: Poppins, sans-serif;
-      }
+<style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Poppins,sans-serif;
+}
 
-      body {
-        background: #f5f7fb;
-        padding: 30px;
-        color: #334155;
-      }
+body{
+background:#f5f7fb;
+padding:25px;
+color:#334155;
+}
 
-      .container {
-        max-width: 1600px;
-        margin: auto;
-      }
+h1{
+text-align:center;
+margin-bottom:25px;
+}
 
-      .header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        flex-wrap: wrap;
-        gap: 15px;
-        margin-bottom: 20px;
-      }
+.section{
+margin-bottom:50px;
+}
 
-      h1 {
-        font-size: 32px;
-      }
+.section-title{
+margin-bottom:15px;
+font-size:28px;
+color:#4338ca;
+}
 
-      .stats {
-        display: flex;
-        gap: 15px;
-      }
+.stats{
+display:flex;
+gap:15px;
+flex-wrap:wrap;
+margin-bottom:20px;
+}
 
-      .card {
-        background: white;
-        padding: 20px;
-        border-radius: 20px;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-        min-width: 140px;
-        text-align: center;
-      }
+.card{
+background:white;
+padding:18px;
+border-radius:18px;
+min-width:150px;
+text-align:center;
+box-shadow:0 4px 12px rgba(0,0,0,.08);
+}
 
-      .card h2 {
-        color: #4f46e5;
-      }
+.card h2{
+color:#4f46e5;
+}
 
-      .controls {
-        display: flex;
-        gap: 10px;
-        margin-bottom: 20px;
-      }
+.progress-box{
+margin-bottom:20px;
+}
 
-      button {
-        padding: 10px 20px;
-        border: none;
-        border-radius: 12px;
-        cursor: pointer;
-        font-weight: 600;
-      }
+.progress{
+height:12px;
+background:#e2e8f0;
+border-radius:20px;
+overflow:hidden;
+}
 
-      .reset-btn {
-        background: #ef4444;
-        color: white;
-      }
+.progress-fill{
+height:100%;
+width:0%;
+background:linear-gradient(90deg,#6366f1,#8b5cf6);
+transition:.3s;
+}
 
-      .progress-box {
-        margin-bottom: 20px;
-      }
+.progress-text{
+margin-bottom:8px;
+font-weight:600;
+}
 
-      .progress-text {
-        margin-bottom: 8px;
-        font-weight: 600;
-      }
+.table-container{
+background:white;
+padding:20px;
+border-radius:20px;
+overflow:auto;
+box-shadow:0 4px 12px rgba(0,0,0,.08);
+}
 
-      .progress {
-        height: 12px;
-        background: #e2e8f0;
-        border-radius: 20px;
-        overflow: hidden;
-      }
+table{
+width:100%;
+border-collapse:separate;
+border-spacing:0 8px;
+min-width:1200px;
+}
 
-      .progress-fill {
-        height: 100%;
-        width: 0%;
-        background: linear-gradient(90deg, #6366f1, #8b5cf6);
-        transition: 0.3s;
-      }
+th{
+background:#eef2ff;
+padding:12px;
+color:#4338ca;
+}
 
-      .table-container {
-        background: white;
-        padding: 20px;
-        border-radius: 25px;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-        overflow-x: auto;
-      }
+td{
+background:#f8fafc;
+padding:12px;
+text-align:center;
+}
 
-      table {
-        width: 100%;
-        border-collapse: separate;
-        border-spacing: 0 10px;
-        min-width: 1200px;
-      }
+td:first-child,
+td:nth-child(2){
+text-align:left;
+font-weight:500;
+}
 
-      th {
-        background: #eef2ff;
-        color: #4338ca;
-        padding: 15px;
-      }
+.status-btn{
+width:42px;
+height:42px;
+border:none;
+border-radius:10px;
+cursor:pointer;
+font-size:18px;
+color:white;
+}
 
-      td {
-        background: #f8fafc;
-        padding: 15px;
-        text-align: center;
-      }
+.reset-btn{
+padding:10px 20px;
+background:#ef4444;
+color:white;
+border:none;
+border-radius:10px;
+cursor:pointer;
+margin-bottom:20px;
+}
+</style>
+</head>
 
-      td:first-child,
-      td:nth-child(2) {
-        text-align: left;
-        font-weight: 500;
-      }
+<body>
 
-      tr td:first-child {
-        border-radius: 15px 0 0 15px;
-      }
+<h1>📚 IBPS PO STUDY TRACKER V2</h1>
 
-      tr td:last-child {
-        border-radius: 0 15px 15px 0;
-      }
+<button class="reset-btn" onclick="resetAll()">Reset All</button>
 
-      input[type="checkbox"] {
-        width: 22px;
-        height: 22px;
-        cursor: pointer;
-        accent-color: #4f46e5;
-      }
-    </style>
-  </head>
+<div id="tracker"></div>
 
-  <body>
-    <div class="container">
-      <div class="header">
-        <h1>📚 IBPS PO Study Tracker</h1>
+<script>
 
-        <div class="stats">
-          <div class="card">
-            <h2 id="completed">0</h2>
-            <p>Completed</p>
-          </div>
+const tasks=[
+["5:30 AM - 7:00 AM","🏃 Running"],
+["8:30 AM - 11:00 AM","🧠 Reasoning + Revision"],
+["11:00 AM - 1:30 PM","📖 Editorial + English"],
+["2:00 PM - 5:00 PM","📊 Quant Checklist + DI"],
+["5:00 PM - 8:00 PM","🔁 Quant Revision"],
+["9:00 PM - 11:00 PM","🎯 Mock IBPS PO"],
+["11:00 PM - 12:00 AM","📚 English Revision"]
+];
 
-          <div class="card">
-            <h2 id="remaining">0</h2>
-            <p>Remaining</p>
-          </div>
-        </div>
-      </div>
+const sections=[
+{
+id:"june",
+title:"📅 June 21 - 30",
+dates:["21 Jun","22 Jun","23 Jun","24 Jun","25 Jun","26 Jun","27 Jun","28 Jun","29 Jun","30 Jun"]
+},
+{
+id:"aug1",
+title:"📅 August 1 - 10",
+dates:["1 Aug","2 Aug","3 Aug","4 Aug","5 Aug","6 Aug","7 Aug","8 Aug","9 Aug","10 Aug"]
+},
+{
+id:"aug2",
+title:"📅 August 11 - 20",
+dates:["11 Aug","12 Aug","13 Aug","14 Aug","15 Aug","16 Aug","17 Aug","18 Aug","19 Aug","20 Aug"]
+},
+{
+id:"aug3",
+title:"📅 August 21 - 31",
+dates:["21 Aug","22 Aug","23 Aug","24 Aug","25 Aug","26 Aug","27 Aug","28 Aug","29 Aug","30 Aug","31 Aug"]
+}
+];
 
-      <div class="controls">
-        <button class="reset-btn" onclick="resetTracker()">
-          Reset Tracker
-        </button>
-      </div>
+const tracker=document.getElementById("tracker");
 
-      <div class="progress-box">
-        <div class="progress-text" id="progressText">Overall Progress: 0%</div>
+sections.forEach((section,sIndex)=>{
 
-        <div class="progress">
-          <div class="progress-fill" id="progressFill"></div>
-        </div>
-      </div>
+const total=section.dates.length*tasks.length;
 
-      <div class="table-container">
-        <table>
-          <thead>
-            <tr id="dateHeader">
-              <th>⏰ Time Slot</th>
-              <th>📖 Task</th>
-            </tr>
-          </thead>
+const wrapper=document.createElement("div");
+wrapper.className="section";
 
-          <tbody id="tableBody"></tbody>
-        </table>
-      </div>
-    </div>
+wrapper.innerHTML=`
+<h2 class="section-title">${section.title}</h2>
 
-    <script>
-      const dates = [
-        "21 Jun",
-        "22 Jun",
-        "23 Jun",
-        "24 Jun",
-        "25 Jun",
-        "26 Jun",
-        "27 Jun",
-        "28 Jun",
-        "29 Jun",
-        "30 Jun",
-      ];
+<div class="stats">
+<div class="card">
+<h2 id="${section.id}-completed">0</h2>
+<p>Completed</p>
+</div>
 
-      const tasks = [
-        ["5:30 AM - 7:00 AM", "🏃 Running"],
-        ["8:30 AM - 11:00 AM", "🧠 Reasoning + Revision"],
-        ["11:00 AM - 1:30 PM", "📖 Editorial + English"],
-        ["2:00 PM - 5:00 PM", "📊 Quant Checklist + DI"],
-        ["5:00 PM - 8:00 PM", "🔁 Quant Revision"],
-        ["9:00 PM - 11:00 PM", "🎯 Mock IBPS PO"],
-        ["11:00 PM - 12:00 AM", "📚 English Revision"],
-      ];
+<div class="card">
+<h2 id="${section.id}-missed">0</h2>
+<p>Missed</p>
+</div>
 
-      const header = document.getElementById("dateHeader");
+<div class="card">
+<h2 id="${section.id}-remaining">${total}</h2>
+<p>Remaining</p>
+</div>
+</div>
 
-      dates.forEach((date) => {
-        const th = document.createElement("th");
-        th.textContent = date;
-        header.appendChild(th);
-      });
+<div class="progress-box">
+<div class="progress-text" id="${section.id}-text">
+Progress: 0%
+</div>
 
-      const body = document.getElementById("tableBody");
+<div class="progress">
+<div class="progress-fill" id="${section.id}-fill"></div>
+</div>
+</div>
 
-      tasks.forEach((task, row) => {
-        const tr = document.createElement("tr");
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>⏰ Time Slot</th>
+<th>📖 Task</th>
+${section.dates.map(d=>`<th>${d}</th>`).join("")}
+</tr>
+</thead>
+<tbody id="${section.id}-body"></tbody>
+</table>
+</div>
+`;
 
-        tr.innerHTML = `
+tracker.appendChild(wrapper);
+
+const body=document.getElementById(section.id+"-body");
+
+tasks.forEach((task,row)=>{
+
+const tr=document.createElement("tr");
+
+tr.innerHTML=`
 <td>${task[0]}</td>
 <td>${task[1]}</td>
 `;
 
-        dates.forEach((date, col) => {
-          const td = document.createElement("td");
+section.dates.forEach((date,col)=>{
 
-          const checkbox = document.createElement("input");
-          checkbox.type = "checkbox";
+const td=document.createElement("td");
 
-          const key = `ibps-tracker-june-${row}-${col}`;
+const key=`tracker-${section.id}-${row}-${col}`;
 
-          checkbox.checked = localStorage.getItem(key) === "true";
+const btn=document.createElement("button");
+btn.className="status-btn";
 
-          checkbox.addEventListener("change", () => {
-            localStorage.setItem(key, checkbox.checked);
-            updateProgress();
-          });
+let state=localStorage.getItem(key)||"none";
 
-          td.appendChild(checkbox);
-          tr.appendChild(td);
-        });
+function paint(){
+if(state==="done"){
+btn.innerHTML="✅";
+btn.style.background="#22c55e";
+}
+else if(state==="missed"){
+btn.innerHTML="❌";
+btn.style.background="#ef4444";
+}
+else{
+btn.innerHTML="⚪";
+btn.style.background="#94a3b8";
+}
+}
 
-        body.appendChild(tr);
-      });
+paint();
 
-      function updateProgress() {
-        const all = document.querySelectorAll('input[type="checkbox"]');
-        const checked = document.querySelectorAll(
-          'input[type="checkbox"]:checked',
-        );
+btn.addEventListener("click",()=>{
 
-        const completed = checked.length;
-        const total = all.length;
+if(state==="none"){
+state="done";
+}
+else if(state==="done"){
+state="missed";
+}
+else{
+state="none";
+}
 
-        document.getElementById("completed").innerText = completed;
-        document.getElementById("remaining").innerText = total - completed;
+localStorage.setItem(key,state);
+paint();
+updateSection(section);
+});
 
-        const percentage = Math.round((completed / total) * 100);
+td.appendChild(btn);
+tr.appendChild(td);
 
-        document.getElementById("progressFill").style.width = percentage + "%";
+});
 
-        document.getElementById("progressText").innerText =
-          `Overall Progress: ${percentage}%`;
-      }
+body.appendChild(tr);
+});
 
-      function resetTracker() {
-        if (confirm("Reset all progress?")) {
-          Object.keys(localStorage).forEach((key) => {
-            if (key.startsWith("ibps-tracker-june")) {
-              localStorage.removeItem(key);
-            }
-          });
+updateSection(section);
 
-          location.reload();
-        }
-      }
+});
 
-      updateProgress();
-    </script>
-  </body>
+function updateSection(section){
+
+let completed=0;
+let missed=0;
+
+Object.keys(localStorage).forEach(key=>{
+
+if(key.startsWith("tracker-"+section.id)){
+
+const value=localStorage.getItem(key);
+
+if(value==="done") completed++;
+if(value==="missed") missed++;
+}
+});
+
+const total=section.dates.length*tasks.length;
+const remaining=total-completed-missed;
+
+document.getElementById(section.id+"-completed").innerText=completed;
+document.getElementById(section.id+"-missed").innerText=missed;
+document.getElementById(section.id+"-remaining").innerText=remaining;
+
+const percent=Math.round((completed/total)*100);
+
+document.getElementById(section.id+"-fill").style.width=percent+"%";
+
+document.getElementById(section.id+"-text").innerText=
+`Completed: ${completed} | Missed: ${missed} | Progress: ${percent}%`;
+}
+
+function resetAll(){
+
+if(confirm("Reset all progress?")){
+
+Object.keys(localStorage).forEach(key=>{
+if(key.startsWith("tracker-")){
+localStorage.removeItem(key);
+}
+});
+
+location.reload();
+}
+}
+</script>
+
+</body>
 </html>
